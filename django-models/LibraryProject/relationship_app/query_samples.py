@@ -7,6 +7,7 @@ django.setup()
 
 from relationship_app.models import Author, Book, Library, Librarian
 
+
 # --- Sample Queries ---
 
 def query_books_by_author(author_name):
@@ -43,7 +44,7 @@ def get_librarian_for_library(library_name):
     """Retrieve the librarian for a library"""
     try:
         library = Library.objects.get(name=library_name)
-        librarian = library.librarian  # Access via the OneToOne relation
+        librarian = Librarian.objects.get(library=library)  # <-- Explicit forward query
         print(f"\nLibrarian for {library_name} library: {librarian.name}")
     except Library.DoesNotExist:
         print(f"No library found with name '{library_name}'.")
