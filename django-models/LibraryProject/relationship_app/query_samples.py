@@ -13,10 +13,13 @@ def query_books_by_author(author_name):
     """Query all books by a specific author"""
     try:
         author = Author.objects.get(name=author_name)
-        books = author.books.all()
+        books = Book.objects.filter(author=author)  # <-- Explicit filter query
         print(f"\nBooks by {author_name}:")
-        for book in books:
-            print(f"- {book.title}")
+        if books.exists():
+            for book in books:
+                print(f"- {book.title}")
+        else:
+            print("No books found for this author.")
     except Author.DoesNotExist:
         print(f"No author found with name '{author_name}'.")
 
@@ -27,8 +30,11 @@ def list_books_in_library(library_name):
         library = Library.objects.get(name=library_name)
         books = library.books.all()
         print(f"\nBooks in {library_name} library:")
-        for book in books:
-            print(f"- {book.title}")
+        if books.exists():
+            for book in books:
+                print(f"- {book.title}")
+        else:
+            print("No books found in this library.")
     except Library.DoesNotExist:
         print(f"No library found with name '{library_name}'.")
 
