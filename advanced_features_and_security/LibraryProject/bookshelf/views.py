@@ -4,42 +4,47 @@ from django.shortcuts import render
 
 
 
-# content/views.py
+# library/views.py
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import permission_required
-from .models import Article
+from .models import Book
 
 
-@permission_required("content.can_view", raise_exception=True)
-def article_list(request):
-    articles = Article.objects.all()
-    return render(request, "content/article_list.html", {"articles": articles})
+@permission_required("library.can_view", raise_exception=True)
+def book_list(request):
+    """
+    Shows all books.
+    Requires: library.can_view
+    """
+    books = Book.objects.all()
+    return render(request, "library/book_list.html", {"books": books})
 
 
-@permission_required("content.can_create", raise_exception=True)
-def article_create(request):
+@permission_required("library.can_create", raise_exception=True)
+def book_create(request):
+    """
+    Creates a new book.
+    Requires: library.can_create
+    """
     if request.method == "POST":
         title = request.POST.get("title")
-        body = request.POST.get("body")
-        Article.objects.create(title=title, body=body, owner=request.user)
-        return redirect("article_list")
-    return render(request, "content/article_create.html")
+        author = request.POST.get("author")
+        Book.objects.create(title=title, author=author)
+        return redirect("book_list")
+
+    return render(request, "library/book_create.html")
 
 
-@permission_required("content.can_edit", raise_exception=True)
-def article_edit(request, pk):
-    article = get_object_or_404(Article, pk=pk)
+@permission_required("library.can_edit", raise_exception=True)
+def book_edit(request, book_id):
+    """
+    Edits an existing book.
+    Requires: library.can_edit
+    """
+    book = get_object_or_404(Book, id=book_id)
+
     if request.method == "POST":
-        article.title = request.POST.get("title")
-        article.body = request.POST.get("body")
-        article.save()
-        return redirect("article_list")
-    return render(request, "content/article_edit.html", {"article": article})
-
-
-@permission_required("content.can_delete", raise_exception=True)
-def article_delete(request, pk):
-    article = get_object_or_404(Article, pk=pk)
-    article.delete()
-    return redirect("article_list")
+        book.title = request.POST.get("title")
+        book.author = request.POST.get("author")
+        book.s
