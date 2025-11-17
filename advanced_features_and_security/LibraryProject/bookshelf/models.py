@@ -51,3 +51,41 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+    
+
+
+
+
+
+
+
+
+    from django.db import models
+from django.contrib.auth import get_user_model
+
+
+class Article(models.Model):
+    """
+    Example model used to demonstrate custom permissions.
+    Permissions added:
+        - can_view
+        - can_create
+        - can_edit
+        - can_delete
+    """
+
+    title = models.CharField(max_length=255)
+    body = models.TextField()
+    owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+
+    class Meta:
+        # Custom permissions
+        permissions = [
+            ("can_view", "Can view article"),
+            ("can_create", "Can create article"),
+            ("can_edit", "Can edit article"),
+            ("can_delete", "Can delete article"),
+        ]
+
+    def __str__(self):
+        return self.title
