@@ -128,3 +128,63 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+SECURITY CONFIGURATION
+These settings protect against:
+ - XSS (Cross-Site Scripting)
+ - CSRF (Cross-Site Request Forgery)
+ - Clickjacking
+ - Content sniffing attacks
+ - Cookie hijacking
+ - Insecure HTTP usage
+"""
+
+DEBUG = False  # Never enable DEBUG in production
+
+# Prevent the browser from executing malicious scripts
+SECURE_BROWSER_XSS_FILTER = True
+
+# Prevent MIME-type sniffing
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Prevent clickjacking attacks
+X_FRAME_OPTIONS = "DENY"
+
+# Cookies sent only over HTTPS
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Ensures cookies are only sent to your domain
+SESSION_COOKIE_SAMESITE = "Strict"
+CSRF_COOKIE_SAMESITE = "Strict"
+
+# Recommended: force HTTPS redirects
+SECURE_SSL_REDIRECT = True
+
+# Content Security Policy (added via django-csp)
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'", "https://fonts.googleapis.com")
+CSP_SCRIPT_SRC = ("'self'",)
+CSP_FONT_SRC = ("'self'",)
+CSP_IMG_SRC = ("'self'",)
+
+
+MIDDLEWARE = [
+    ...,
+    "csp.middleware.CSPMiddleware",  # Content Security Policy protection
+]
+
+
