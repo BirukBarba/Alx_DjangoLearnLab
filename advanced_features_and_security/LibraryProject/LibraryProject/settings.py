@@ -190,7 +190,7 @@ MIDDLEWARE = [
 
 
 
-# settings.py
+
 
 # Force HTTPS connections (redirect all non-HTTPS requests to HTTPS)
 SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
@@ -211,3 +211,8 @@ SECURE_SSL_REDIRECT = True  # Force HTTPS for all requests
 SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent MIME sniffing of content
 SECURE_BROWSER_XSS_FILTER = True  # Enable browser's XSS filtering
 X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking by disallowing framing of your site
+
+
+
+# Tell Django that the request may come via a reverse proxy and that the "X-Forwarded-Proto" header should be trusted
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
