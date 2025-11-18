@@ -72,3 +72,25 @@ class ExampleForm(forms.Form):
         if len(content) < 20:
             raise forms.ValidationError("Content must be at least 20 characters long.")
         return content
+
+
+
+
+
+# bookshelf/views.py
+from django.shortcuts import render
+from .forms import ExampleForm  # <-- Correct Import
+
+def book_form_view(request):
+    if request.method == 'POST':
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            # Process the form data (e.g., save it to the database or display it)
+            title = form.cleaned_data['title']
+            content = form.cleaned_data['content']
+            return render(request, 'bookshelf/book_success.html', {'title': title, 'content': content})
+        else:
+            return render(request, 'bookshelf/form_example.html', {'form': form})
+    else:
+        form = ExampleForm()
+        return render(request, 'bookshelf/form_example.html', {'form': form})
