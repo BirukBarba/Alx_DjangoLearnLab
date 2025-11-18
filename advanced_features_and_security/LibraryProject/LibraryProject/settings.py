@@ -188,3 +188,26 @@ MIDDLEWARE = [
 ]
 
 
+
+
+# settings.py
+
+# Force HTTPS connections (redirect all non-HTTPS requests to HTTPS)
+SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
+
+# HTTP Strict Transport Security (HSTS) - instruct browsers to only use HTTPS
+SECURE_HSTS_SECONDS = 31536000  # One year in seconds
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to all subdomains
+SECURE_HSTS_PRELOAD = True  # Allow the domain to be included in the HSTS preload list
+
+# Only allow HTTPS connections for session and CSRF cookies
+SESSION_COOKIE_SECURE = True  # Ensures session cookies are only sent over HTTPS
+CSRF_COOKIE_SECURE = True  # Ensures CSRF cookies are only sent over HTTPS
+
+# Enforce HTTPS by redirecting to HTTPS if not already in use
+SECURE_SSL_REDIRECT = True  # Force HTTPS for all requests
+
+# Secure Content Type Sniffing Prevention (XSS Protection)
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent MIME sniffing of content
+SECURE_BROWSER_XSS_FILTER = True  # Enable browser's XSS filtering
+X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking by disallowing framing of your site
