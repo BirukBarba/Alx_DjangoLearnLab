@@ -48,3 +48,27 @@ def book_edit(request, book_id):
         book.title = request.POST.get("title")
         book.author = request.POST.get("author")
         book.s
+
+
+
+
+
+
+# bookshelf/forms.py
+from django import forms
+
+class ExampleForm(forms.Form):
+    title = forms.CharField(max_length=200, required=True, help_text="Enter the book title")
+    content = forms.CharField(widget=forms.Textarea, required=True, help_text="Enter the content or description")
+    
+    def clean_title(self):
+        title = self.cleaned_data.get('title')
+        if len(title) < 5:
+            raise forms.ValidationError("Title must be at least 5 characters long.")
+        return title
+
+    def clean_content(self):
+        content = self.cleaned_data.get('content')
+        if len(content) < 20:
+            raise forms.ValidationError("Content must be at least 20 characters long.")
+        return content
