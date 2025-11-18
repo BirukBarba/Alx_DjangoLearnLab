@@ -1,0 +1,7 @@
+<!-- form_example.html -->
+<form method="POST" action="{% url 'some_view' %}">
+    {% csrf_token %}
+    <input type="text" name="title" placeholder="Title">
+    <textarea name="content" placeholder="Content"></textarea>
+    <button type="submit">Submit</button>
+</form>
