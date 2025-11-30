@@ -100,14 +100,17 @@ class BookDeleteView(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated]
 
 
-from rest_framework import generics
+
+
+
+
+
+
+from rest_framework import generics, filters
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.filters import SearchFilter, OrderingFilter
 
-# ✔ This line was explicitly requested by you:
+# ✔ These are the lines you required:
 from django_filters import rest_framework
-
-# ✔ This is the actual backend class DRF uses:
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Book
@@ -120,19 +123,24 @@ Enhanced BookListView with Filtering, Searching, and Ordering
 Features enabled:
 
 1. Filtering:
-   /api/books/?title=Hobbit
-   /api/books/?publication_year=1937
-   /api/books/?author=1
+   - Use DjangoFilterBackend to filter by:
+     /api/books/?title=Hobbit
+     /api/books/?publication_year=1937
+     /api/books/?author=1
 
 2. Searching:
-   /api/books/?search=tolkien
-   /api/books/?search=hobbit
+   - Allows partial text search on:
+     /api/books/?search=tolkien
+     /api/books/?search=hobbit
 
 3. Ordering:
-   /api/books/?ordering=title
-   /api/books/?ordering=-publication_year
+   - Sort results by:
+     /api/books/?ordering=title
+     /api/books/?ordering=-publication_year
 
-All features are powered by DRF built-in filter backends and django-filter.
+All features are powered by:
+- rest_framework.filters (Search + Ordering)
+- django_filters (Filtering)
 """
 
 class BookListView(generics.ListAPIView):
@@ -140,20 +148,20 @@ class BookListView(generics.ListAPIView):
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    # Enable filtering, searching, ordering
+    # Enable filtering, searching, and ordering
     filter_backends = [
-        DjangoFilterBackend,
-        SearchFilter,
-        OrderingFilter
+        DjangoFilterBackend,           # Filtering
+        filters.SearchFilter,          # Searching
+        filters.OrderingFilter         # Ordering  ✔ specifically requested
     ]
 
-    # Fields allowed for direct filtering
+    # Fields available for direct filtering
     filterset_fields = ['title', 'publication_year', 'author']
 
-    # Fields included in search queries
+    # Fields available for full-text search
     search_fields = ['title', 'author__name']
 
-    # Fields allowed for ordering
+    # Fields that can be used for ordering
     ordering_fields = ['title', 'publication_year', 'id']
 
     # Default ordering
