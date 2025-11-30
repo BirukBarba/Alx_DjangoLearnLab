@@ -98,3 +98,61 @@ class BookDeleteView(generics.DestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticated]
+
+
+
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
+
+from .models import Book
+from .serializers import BookSerializer
+
+"""
+Enhanced BookListView with Advanced Querying
+--------------------------------------------
+
+This view now supports:
+
+1. Filtering:
+   - Filter by title, publication_year, and author using:
+     /api/books/?title=Name
+     /api/books/?publication_year=2020
+     /api/books/?author=1
+
+2. Searching:
+   - Search across title and author name using:
+     /api/books/?search=tolkien
+
+3. Ordering:
+   - Order by title, publication_year, or any model field:
+     /api/books/?ordering=title
+     /api/books/?ordering=-publication_year
+
+These capabilities provide a rich query interface for API consumers.
+"""
+
+class BookListView(generics.ListAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    # Enable filtering, searching, ordering
+    filter_backends = [
+        DjangoFilterBackend,
+        SearchFilter,
+        OrderingFilter
+    ]
+
+    # Filtering fields
+    filterset_fields = ['title', 'publication_year', 'author']
+
+    # Enable search across fields
+    search_fields = ['title', 'author__name']
+
+    # Allow ordering by fields
+    ordering_fields = ['title', 'publication_year', 'id']
+
+    # Optional: default ordering
+    ordering = ['title']
