@@ -100,37 +100,39 @@ class BookDeleteView(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated]
 
 
-
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.filters import SearchFilter, OrderingFilter
+
+# ✔ This line was explicitly requested by you:
+from django_filters import rest_framework
+
+# ✔ This is the actual backend class DRF uses:
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Book
 from .serializers import BookSerializer
 
 """
-Enhanced BookListView with Advanced Querying
---------------------------------------------
+Enhanced BookListView with Filtering, Searching, and Ordering
+-------------------------------------------------------------
 
-This view now supports:
+Features enabled:
 
 1. Filtering:
-   - Filter by title, publication_year, and author using:
-     /api/books/?title=Name
-     /api/books/?publication_year=2020
-     /api/books/?author=1
+   /api/books/?title=Hobbit
+   /api/books/?publication_year=1937
+   /api/books/?author=1
 
 2. Searching:
-   - Search across title and author name using:
-     /api/books/?search=tolkien
+   /api/books/?search=tolkien
+   /api/books/?search=hobbit
 
 3. Ordering:
-   - Order by title, publication_year, or any model field:
-     /api/books/?ordering=title
-     /api/books/?ordering=-publication_year
+   /api/books/?ordering=title
+   /api/books/?ordering=-publication_year
 
-These capabilities provide a rich query interface for API consumers.
+All features are powered by DRF built-in filter backends and django-filter.
 """
 
 class BookListView(generics.ListAPIView):
@@ -145,14 +147,14 @@ class BookListView(generics.ListAPIView):
         OrderingFilter
     ]
 
-    # Filtering fields
+    # Fields allowed for direct filtering
     filterset_fields = ['title', 'publication_year', 'author']
 
-    # Enable search across fields
+    # Fields included in search queries
     search_fields = ['title', 'author__name']
 
-    # Allow ordering by fields
+    # Fields allowed for ordering
     ordering_fields = ['title', 'publication_year', 'id']
 
-    # Optional: default ordering
+    # Default ordering
     ordering = ['title']
