@@ -12,11 +12,11 @@ Book API URL Routing
 --------------------
 
 Endpoints:
-    /books/               → list all books (GET)
-    /books/create/        → create new book (POST)
-    /books/<pk>/          → retrieve single book (GET)
-    /books/<pk>/update/   → update book (PUT/PATCH)
-    /books/<pk>/delete/   → delete book (DELETE)
+    /books/                    → list all books (GET)
+    /books/create/             → create new book (POST)
+    /books/<pk>/               → retrieve single book (GET)
+    /books/<pk>/update/        → update book (PUT/PATCH)
+    /books/<pk>/delete/        → delete book (DELETE)
 """
 
 urlpatterns = [
