@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from django.contrib.auth import authenticate
+from django.contrib.auth import get_user_model, authenticate
+from rest_framework.authtoken.models import Token
 from .models import User
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -10,25 +11,27 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ('username', 'email', 'password', 'bio')
 
     def create(self, validated_data):
-        user = User.objects.create_user(
+        # Create the user instance
+        user = get_user_model().objects.create_user(
             username=validated_data['username'],
-            email=validated_data.get('email'),
+            email=validated_data.get('email', ''),
             password=validated_data['password'],
             bio=validated_data.get('bio', '')
         )
+        # Create token for the new user
+        token, _ = Token.objects.get_or_create(user=user)
         return user
-
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)
 
     def validate(self, data):
+        # Authenticate user with given credentials
         user = authenticate(**data)
         if not user:
             raise serializers.ValidationError("Invalid credentials")
         return user
-
 
 class UserProfileSerializer(serializers.ModelSerializer):
     followers_count = serializers.SerializerMethodField()
