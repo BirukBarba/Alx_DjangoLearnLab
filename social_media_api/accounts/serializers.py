@@ -19,7 +19,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             bio=validated_data.get('bio', '')
         )
         # Create token for the new user
-        token, _ = Token.objects.get_or_create(user=user)
+        token, _ = Token.objects.create(user=user)
         return user
 
 class LoginSerializer(serializers.Serializer):
