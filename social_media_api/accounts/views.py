@@ -50,6 +50,7 @@ from .models import User  # or your custom user model if needed
 
 # Use get_user_model() instead of directly referencing CustomUser
 User = get_user_model()
+CustomUser.objects.all()
 
 class FollowUserView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
