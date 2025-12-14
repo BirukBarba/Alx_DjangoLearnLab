@@ -47,3 +47,22 @@ class Like(models.Model):
         return f"{self.user.username} likes {self.post.title}"
 
 
+
+
+from django.db import models
+from django.contrib.auth import get_user_model
+from .models import Post  # Import Post model
+
+User = get_user_model()
+
+# Like Model
+class Like(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('post', 'user')  # Prevent users from liking the same post multiple times
+
+    def __str__(self):
+        return f"{self.user.username} likes {self.post.title}"
