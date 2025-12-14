@@ -70,7 +70,8 @@ class FeedView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-from rest_framework import generics, permissions, status
+# posts/views.py
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
@@ -83,6 +84,7 @@ from django.contrib.contenttypes.models import ContentType
 def like_post(request, pk):
     """Like a post"""
     post = get_object_or_404(Post, pk=pk)
+    
     # Prevent a user from liking the post multiple times
     if Like.objects.filter(post=post, user=request.user).exists():
         return Response({"detail": "You have already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
@@ -105,6 +107,8 @@ def like_post(request, pk):
 def unlike_post(request, pk):
     """Unlike a post"""
     post = get_object_or_404(Post, pk=pk)
+    
+    # Ensure the user has liked the post before attempting to unlike
     like = get_object_or_404(Like, post=post, user=request.user)
     like.delete()
 
